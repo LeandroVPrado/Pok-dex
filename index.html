@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokédex</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+    <div class="search-bar">
+        <input 
+            type="text" 
+            v-model="searchText" 
+            @input="filterPokemons" 
+            placeholder="Procure seu pokémon"
+            class="search-input"
+        >
+    </div>
+    <div class="pokemon-container">
+        <ul>
+            <li v-for="pokemon in filteredPokemons" 
+                :key="pokemon.id" 
+                :class="[
+                    getTypeClass(pokemon.types[0].type.name),
+                    pokemon.types.length > 1 ? `secondary-${getTypeClass(pokemon.types[1].type.name)}` : ''
+                ]"
+            >
+                <div class="pokemon-card">
+                    <p class="pokemon-name">{{ pokemon.name }}</p>
+                    <div class="pokemon-img">
+                        <img :src="pokemon.sprites.other.showdown.front_default" alt="pokemon">
+                    </div>
+                    <div class="type-container">
+                        <span class="type-badge" :class="getTypeClass(pokemon.types[0].type.name)">
+                            {{pokemon.types[0].type.name}}
+                        </span>
+                        <span v-if="pokemon.types.length > 1" 
+                              class="type-badge" 
+                              :class="getTypeClass(pokemon.types[1].type.name)">
+                            {{pokemon.types[1].type.name}}
+                        </span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="loading">
+        <h1 v-if="loading">Loading...</h1>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="index.js"></script>
